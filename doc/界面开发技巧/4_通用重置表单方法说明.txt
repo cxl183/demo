@@ -1,0 +1,11 @@
+重置表单的两种方式
+  resetNormalForm(formId)
+  作用：重置除隐藏域以外的所有输入控件的值；
+  参数：formId=表单ID
+  示例：resetNormalForm('goodsForm')
+
+  resetForm(formId,inputName....)
+  作用：重置除对应name输入控件的其他控件的值
+  参数：formId=表单ID
+        inputName=输入控件name，可变参数,不传此参数默认会将所有输入控件的值清空，包括隐藏域；传入后将不清空该输入控件的值
+  示例：resetForm('goodsForm','goodsCode','goodsName','goodsModel')

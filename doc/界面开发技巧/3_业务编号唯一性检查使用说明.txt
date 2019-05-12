@@ -1,0 +1,73 @@
+业务编号唯一性验证代码示例：
+JS源码：
+/**
+ *  验证编号是否存在，若存在则弹出提示并禁用保存按钮，编辑界面
+ * @param e 需验证的文本框
+ * @param validUrl 验证数据的URL
+ * @param paraName 参数名
+ * @param pkName   主键对应控件name
+ * @param saveBtnId 保存按钮的ID,留空则默认为“saveBtn”
+ * @returns
+ */
+
+function validDataCode(e,validUrl,paraName,pkName,saveBtnId) {
+	if(pkName!=undefined && pkName!= null && pkName!= ''){
+		//获取表单中主键值
+		var pkId=mini.getbyName(pkName).getValue();
+		//判断主键值是否为空，不为空则说明是编辑界面
+		if(null!=pkId && pkId.length>0){
+			return;
+		}
+	}
+	//获取保存按钮ID
+	var saveBtn=saveBtnId;
+	//判断保存按钮ID是否传入，若未传入则默认为“saveBtn”
+	if(saveBtnId==undefined || saveBtnId == null || saveBtnId== ''){
+		saveBtn="saveBtn";
+	}
+	
+	var inputValue=e.value;
+	if (inputValue!="") {
+        $.ajax({
+            url: validUrl+"?"+paraName+"="+e.value,
+            type:'get',
+            cache: false,
+            success: function (text) {
+                var o = mini.decode(text);
+               	if(o.msgCode!=0){
+               		mini.alert(o.msg);
+               		e.setIsValid(false);
+               		e.setErrorText(o.msg);
+               		mini.get(saveBtn).setEnabled(false);
+               	}else{
+               		e.setIsValid(true);
+               		mini.get(saveBtn).setEnabled(true);
+               	}
+            }
+        });
+    }
+}
+
+页面调用代码：
+<input name="goodscode" class="mini-textbox" width="200" required="true" onvalidation="validDataCode(this,'/api/demo/goods/validGoodsCode','goodsCode','id')" />
+
+Controller层代码：
+@ApiOperation(value="验证商品编号是否存在", notes="验证商品编号是否存在")
+    @ApiImplicitParam(name = "goodsCode", value = "goodsCode", required = true, dataType = "String")
+    @RequestMapping(value="/validGoodsCode", method=RequestMethod.GET)
+    public APIResponse<String> validGoodsCode(String goodsCode) {
+    	Long s=goodsService.validGoodsCode(goodsCode);
+    	if (s==null || s<=0) {
+    		return new APIResponse<String>(0,"商品编号可以使用");
+		}else{
+			return new APIResponse<String>(-1,"商品编号已存在，请重新录入！");
+		}
+    }
+   
+Service层代码：
+@Transactional(readOnly=true)
+	public Long validGoodsCode(String goodsCode){
+		 SimpleSpecificationBuilder<DemoGoods> ssb=new SimpleSpecificationBuilder<DemoGoods>();
+		 ssb.add("goodscode","=",goodsCode);
+		 return goodsRepository.countByCond(ssb);
+	}

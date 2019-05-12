@@ -1,0 +1,18 @@
+技术框架说明
+后台：
+Spring Boot ：基础框架，支持多环境配置切换
+Redis：用于存储session的数据，可使用工具RedisDesktopManager查看session中的数据
+Swagger：RESTFUL接口的文档在线自动生成+功能测试
+JPA:数据库持久层,使用Specification进行查询条件封装
+logback：日志组件
+Spring Security：安全框架
+Druid：数据库连接池（阿里巴巴），可监控程序中对数据库的操作
+
+前端:
+模板技术：thymeleaf
+JS框架：MiniUI
+
+代码管理：gitlab
+项目构建：Maven
+
+

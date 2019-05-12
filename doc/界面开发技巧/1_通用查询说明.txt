@@ -1,0 +1,68 @@
+一、分页查询
+
+页面层调用函数：search(数据表格ID,搜索表单ID)
+搜索表单样例代码：
+<form id="searchForm">
+       <table style="width:100%">
+          <tr>
+             <td>
+             类别编号：<input class="mini-textbox" name="eq_typecode" emptyText="请输入类别编号" />
+             </td>
+             <td>
+             类型名称：<input class="mini-textbox" name="like_typename" emptyText="请输入类别名称" />
+             </td>
+          </tr>
+       </table>
+</form>
+说明：name="eq_typecode" 表示typecode的条件运算符为=，必须以英文下划线连接，如果只写字段名，例如typecode，则默认为“等于”查询
+具体运算符标记符为：
+"gt"：">",
+"ge"：">=",
+"lt"："<",
+"le"："<=",
+"like"："like",
+"llike"："llike",
+"rlike"："rlike",
+"eq"："="
+
+后台调用repository.queryPage(pageDto)
+
+二、List查询
+1、自定义条件查询子数据
+   页面层调用函数：searchByCond('goodsGrid','searchGoodsForm','goodsTypeGrid','typeid') 
+   后台查询代码：
+   SimpleSpecificationBuilder<DemoGoods> ssb=new SimpleSpecificationBuilder<DemoGoods>();
+		if (!StringUtils.isEmpty(typeid)) {
+			ssb.add("demoGoodsType.id","=",typeid);
+		}
+		if (!StringUtils.isEmpty(goodsname)) {
+			ssb.add("goodsname","like",goodsname);
+		}
+		if (!StringUtils.isEmpty(goodscode)) {
+			ssb.add("goodscode","like",goodscode);
+		}
+   return BeanMapperUtils.mapList(goodsRepository.findAll(ssb.generateSpecification()), DemoGoods.class, DemoGoodsDto.class);
+
+
+
+2、使用封装参数查询
+   页面层调用函数：search('goodsGrid','searchGoodsForm')
+   查询表单代码：
+   <form id="searchGoodsForm">
+       <table style="width:100%">
+          <tr>
+             <td>
+             <input class="mini-hidden" id="goodstypeid" name="eq_demoGoodsType.id" />
+             商品名称：<input class="mini-textbox" name="like_goodsname" emptyText="请输入商品名称" />
+             </td>
+             <td>
+             商品编号：<input class="mini-textbox" name="like_goodscode" emptyText="请输入商品编号" />
+             </td>
+          </tr>
+       </table>
+      </form>
+   说明：<input class="mini-hidden" id="goodstypeid" name="demoGoodsType.id" /> 用于保存外键ID
+
+三、事务问题
+Service中调用repository操作数据库都需要加上注解Transactional，
+如果是查询数据库则需要加上注解Transactional(readOnly=true)

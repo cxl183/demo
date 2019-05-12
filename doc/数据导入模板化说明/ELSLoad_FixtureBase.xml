@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+ <tableName name="MMS_TEMP_Fixture">
+     <node>
+      <ename>GUID编号</ename>   <!-- 自定义名称,不能跟EXCEL中列名相同 -->
+      <tname>FIXTURERECID</tname>   <!-- 表中主键名称 -->
+      <typeValue>GUID</typeValue>    <!-- 此字段为内容不能更改 --> 
+    </node>
+     <node>
+      <ename>工装编号</ename>
+      <tname>PRCode</tname>
+      <typeValue>varchar(48)</typeValue>   
+    </node> 
+    <node>
+      <ename>工装名称</ename>
+      <tname>PRName</tname>
+      <typeValue>varchar(48)</typeValue>   
+    </node> 
+    <node>
+      <ename>制造厂家</ename>
+      <tname>Producer</tname>
+      <typeValue>varchar(48)</typeValue>   
+    </node>      
+  </tableName>
+</root>

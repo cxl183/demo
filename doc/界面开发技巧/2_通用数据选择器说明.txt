@@ -1,0 +1,51 @@
+//点击按钮调用弹出窗
+<a class="mini-button" iconCls="icon-redo" onclick="getGoodsTypesSelector()">选择商品类型</a>
+function getGoodsTypesSelector(){
+	//定义弹窗中的列头，其中{'headerAlign':'center','type':'checkcolumn'}为复选框，用于多选
+    	var cols=[{'headerAlign':'center','type':'checkcolumn'},
+    			  {'header':'类型编号','field':'typecode','headerAlign':'center'},
+	    		  {'header':'类型名称','field':'typename','headerAlign':'center'},
+	    		  {'header':'创建人','field':'createuser','headerAlign':'center'}
+	    		  ];
+	//定义弹窗中搜索表单中搜索条件，name为搜索框中对应查询字段，label为搜索框的显示信息
+    	var searchFields=[{'name':'like_typename','label':'查询条件1'},
+				{'name':'eq_typecode','label':'查询条件2'},
+				{'name':'eq_typecode','label':'查询条件3'},
+				{'name':'eq_typecode','label':'查询条件4'},
+				{'name':'eq_typecode','label':'查询条件5'},
+				{'name':'like_createuser','label':'查询条件6'},
+				{'name':'like_createuser','label':'查询条件7'},
+				{'name':'like_createuser','label':'查询条件8'},
+				{'name':'like_createuser','label':'查询条件9'},
+				{'name':'like_createuser','label':'查询条件10'},
+				{'name':'like_createuser','label':'查询条件11'}];
+	//打开弹窗，设置title、width、height等属性（具体参见miniUI api手册）
+    	mini.open({
+    	      title:"商品类型选择",
+    	      url:selectorPageUrl,//此路径为默认，不能更改
+    	      //showModal:false,
+    	      width:'60%',
+    	      showMaxButton: true, 
+    	      allowResize: true,
+    	      onload: function () {
+    	    	  var iframe = this.getIFrameEl();
+		  //设置gridUrl,用于弹窗中查询数据,multiSelect表示是否可以多选
+    	          var data = {gridUrl:'/api/demo/goodstype/',cols:cols,searchFields:searchFields,multiSelect:true};
+    	          iframe.contentWindow.SetDataForSelector(data);
+    	      },
+	      //捕捉窗体关闭事件
+    	      ondestroy: function (action) {
+	      //点击确定按钮，则获取选中的数据
+    	    	  if (action == "ok") {
+    	              var iframe = this.getIFrameEl();
+    	              var data = iframe.contentWindow.GetData();
+    	              data = mini.clone(data);
+    	              if (data) {
+			//获取选中数据并处理页面，获取的数据为多选数据，若是列头中未设置多选，则获取的数据为data[0];
+    	            	  alert(data[0].typename);
+    	              }
+    	          }
+
+    	      }
+    	   });
+    }

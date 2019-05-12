@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.htsoft.szq.dao.ImportDataSqlMapper" >
+	<select id="selectByMap" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+	<if test="tableName!=null and fieldName!=null and fieldValue!=null">	
+		SELECT count(1) FROM ${tableName} where ${fieldName}=#{fieldValue}
+	</if>
+	</select>
+	<!-- 动态插入 -->
+	<insert id="insertData"  parameterType="java.util.HashMap">
+		insert into ${tableName}
+			<foreach collection="fieldName" item="item" open="(" close=")" separator="," >
+              ${item}
+            </foreach>
+			<foreach collection="fieldValue" item="item"  open="values(" close=")" separator="," >
+              #{item}
+            </foreach>
+	</insert>
+	<!-- 动态删除 -->
+	<delete id="clearTb" parameterType="java.lang.String">
+		delete from ${_parameter}
+	</delete>
+		<!-- 动态删除 -->
+	<delete id="clearTbByMap" parameterType="java.util.HashMap">
+		delete from ${tableName} where 1=1
+     	<foreach collection="cond" item="item1" separator="and">
+     		and ${item1.flied} = ${item1.value}
+     	</foreach>
+	</delete>
+		<!--动态查询-->
+	<select id="getDateByMap" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select 	
+		<foreach collection="fieldName" item="item" separator="," >
+              ${item}
+        </foreach> from ${tableName} where 1=1 
+        <if test="cond!=null">
+     	<foreach collection="cond" item="item1" separator="and">
+     		and ${item1.flied} = ${item1.value}
+     	</foreach>
+        </if>
+        <if test="store!=null">
+           order by ${store}
+        </if>
+	</select>
+</mapper>

@@ -1,0 +1,6 @@
+1、参见common.js
+2、设置页面按钮的增删改查
+       <a class="mini-button" iconCls="icon-add" onclick="openAddTab('roleTabs','新增','addRoleTab','admin/form/roleForm','roleGrid')">新增</a>
+       <a class="mini-button" iconCls="icon-edit" onclick="openEditTab('roleTabs','编辑','editRoleTab','admin/form/roleForm','roleGrid')">编辑</a>
+       <a class="mini-button" iconCls="icon-find"  id="queryBtn" onclick="openEditTab('roleTabs','详情','detailRoleTab','admin/form/roleForm','roleGrid','query')">查看</a>
+       <a class="mini-button" iconCls="icon-remove"  id="deleBtn" onclick="removeGrid('roleGrid','/api/base/user/role/multiDel')">删除</a>

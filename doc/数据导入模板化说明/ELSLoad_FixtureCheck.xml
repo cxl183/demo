@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+ <tableName name="MMS_TEMP_Check">
+     <node>
+      <ename>GUID编号</ename>   <!-- 自定义名称,不能跟EXCEL中列名相同 -->
+      <tname>CHECKRECID</tname>   <!-- 表中主键名称 -->
+      <typeValue>GUID</typeValue>    <!-- 此字段为内容不能更改 --> 
+    </node>
+    <node>
+      <ename>操作号</ename>
+      <tname>operateNo</tname>
+      <typeValue>varchar(48)</typeValue>   
+    </node> 
+     <node>
+      <ename>盘点标题</ename>
+      <tname>recordtitle</tname>
+      <typeValue>varchar(48)</typeValue>   
+    </node> 
+    <node>
+      <ename>仓库编号</ename>
+      <tname>whcode</tname>
+      <typeValue>varchar(48)</typeValue>   
+    </node>    
+    <node>
+      <ename>仓库名称</ename>
+      <tname>whtitle</tname>
+      <typeValue>varchar(48)</typeValue>   
+    </node> 
+    <node>
+      <ename>资源编号</ename>
+      <tname>prusercode</tname>
+      <typeValue>varchar(48)</typeValue>   
+    </node> 
+    <node>
+      <ename>资源名称</ename>
+      <tname>prname</tname>
+      <typeValue>varchar(48)</typeValue>   
+    </node>
+    <node>
+      <ename>规格</ename>
+      <tname>prspecification</tname>
+      <typeValue>varchar(48)</typeValue>   
+    </node> 
+    <node>
+      <ename>型号</ename>
+      <tname>prmodel</tname>
+      <typeValue>varchar(48)</typeValue>   
+    </node>     
+    <node>
+      <ename>帐面数量</ename>
+      <tname>PHYSICALCOUNTQUANTITY</tname>
+      <typeValue>varchar(48)</typeValue>   
+    </node>       
+    <node>
+      <ename>实盘数量</ename>
+      <tname>firmofferquantiy</tname>
+      <typeValue>varchar(48)</typeValue>   
+    </node>
+    <node>
+      <ename>备注</ename>
+      <tname>memo</tname>
+      <typeValue>varchar(4000)</typeValue>   
+    </node>
+    <node>
+      <ename>制件图号</ename>
+      <tname>f17</tname>
+      <typeValue>varchar(48)</typeValue>   
+    </node> 
+    <node>
+      <ename>制件名称</ename>
+      <tname>f18</tname>
+      <typeValue>varchar(48)</typeValue>   
+    </node>               
+  </tableName>
+</root>
