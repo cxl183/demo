@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>XKES基础应用平台</title>
+    <script src="/ui/resources/js/boot.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css"
+          th:href="@{/ui/resources/css/table.css}" />
+</head>
+<body>
+<div id="classRoomTabs" class="mini-tabs" activeIndex="0" tabPosition="left" style="width:100%;height:100%;" arrowPosition="side" showNavMenu="true"
+>
+    <div name="classRoomSubTab" title="入库单信息">
+        <div id="layout1" class="mini-layout" style="width:100%;height:100%;">
+            <div title="center" region="center" >
+                <div class="mini-searchbar" style="border-top:0;border-bottom-color:#d2d2d2;padding:0;line-height:30px;text-align:left">
+                    <form id="searchForm">
+                        <table style="width:100%">
+                            <tr>
+                                <td>
+                                    班级名称：<input class="mini-textbox" name="like_inlistcode" emptyText="请输入入库单编号" />
+                                    <a class="mini-button" iconCls="icon-search" onclick="search('inlistGrid','searchForm')">查询</a>
+                                    <a class="mini-button" iconCls="icon-redo" onclick="resetForm('searchForm')">重置</a>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+                <div class="mini-toolbar" style="border-top:0;border-bottom:0">
+                    <a class="mini-button" id="addUserBtn" iconCls="icon-add" onclick="openAddTab('classRoomTabs','新增入库单','addClassroomTab','ware/inlistForm','inlistGrid')">增加</a>
+                    <a class="mini-button" id="editUserBtn" iconCls="icon-edit" onclick="openEditTab('classRoomTabs','编辑入库单','editClassroomTab','ware/inlistForm','inlistGrid')">编辑</a>
+                    <a class="mini-button" id="insertUserBtn" iconCls="icon-edit" onclick="insert()">入库</a>
+                    <a class="mini-button" id="queryUserBtn" iconCls="icon-find" onclick="openEditTab('classRoomTabs','查看入库单','queryClassroomTab','ware/inlistForm','inlistGrid','query')">查看</a>
+                    <a class="mini-button"  id="dete" iconCls="icon-remove"  onclick="removeGrid('inlistGrid','/api/warehouse/inlist/multiDel')">删除</a>
+
+                </div>
+                <div class="mini-fit">
+                    <div class="mini-datagrid" style="width:100%;height:100%;"  id="inlistGrid" url="/api/warehouse/inlist/"
+                         ajaxOptions="{type:'get'}"
+                         allowAlternating="true"  multiSelect="true"  onrowclick="onSelectionChanged">
+                        <div property="columns">
+                            <div width="10%" type="checkcolumn" headerAlign="center">选择</div>
+                            <div width="10%" type="indexcolumn" headerAlign="center" align="center">序号</div>
+                            <div width="0%" headerAlign="center" field="id">入库单id</div>
+                            <div width="20%" headerAlign="center" field="inlistcode" align="center">入库单号</div>
+                            <div width="20%" headerAlign="center" field="intime" dateFormat="yyyy-MM-dd" renderer="ondayRenderer" align="center">入库时间</div>
+                            <div width="25%" headerAlign="center" field="handler" align="center">入库经办人</div>
+                            <div width="25%" headerAlign="center" field="instate" align="center">入库单状态</div>
+                            <div width="25%" headerAlign="center" field="lastchangetime" renderer="ondayRenderer" dateFormat="yyyy-MM-dd" align="center">最后更新时间</div>
+                            <div width="25%" headerAlign="center" field="memo" align="center">备注</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div  region="south" height="300" showCollapseButton="false" splitSize="2" showHeader="false">
+                <div class="mini-toolbar" style="border-top:0;border-bottom:0">
+                    <form id="stuSearchForm">
+                        <a class="mini-button" id="add" iconCls="icon-add" onclick="openAddTab('classRoomTabs','新增明细','addStuTab','ware/inlistPro','indetailGrid','inlistGrid')">新增</a>
+                        <a class="mini-button" iconCls="icon-remove"  id="deleBtn" onclick="removeGrid('indetailGrid','/api/warehouse/indetail/multiDel')">删除</a>
+                        <span class="separator"></span>
+
+                        入库明细编号：<input class="mini-textbox" name="like_name" emptyText="明细编号" />
+                        <input name="cid" class="mini-hidden" id="cid" value="-1"/>
+                        <a class="mini-button" iconCls="icon-search" onclick="search('studentGrid','stuSearchForm')">查询</a>
+                        <a class="mini-button" iconCls="icon-redo" onclick="resetForm('stuSearchForm','cid')">重置</a>
+                    </form>
+                </div>
+                <div class="mini-fit">
+                    <div class="mini-datagrid" style="width:100%;height:100%;" id="indetailGrid"  url="/api/warehouse/indetail/"  ajaxOptions="{type:'get'}" allowAlternating="true" sizeList="[10,20,50]" multiSelect="true" pageSize="10">
+                        <div property="columns">
+                            <div width="10%" type="checkcolumn" headerAlign="center">选择</div>
+                            <div width="10%" type="indexcolumn" headerAlign="center">序列</div>
+                            <div width="0%" headerAlign="center" align="center" allowSort="true"  field="id">入库明细id</div>
+                            <div width="20%" headerAlign="center" align="center" allowSort="true"  field="productcode">产品编号</div>
+                            <div width="20%" headerAlign="center" align="center" allowSort="true" field="productname">产品名称</div>
+                            <div width="10%" headerAlign="center" align="center" allowSort="true" field="qty">数量</div>
+                            <div width="10%" headerAlign="center" align="center" allowSort="true" field="depotname">仓库</div>
+                            <div width="10%" headerAlign="center" align="center" allowSort="true" field="areaname">区域</div>
+                            <div width="10%" headerAlign="center" align="center" field="positionname"> 库位</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    mini.parse();
+    var grid = mini.get("inlistGrid");
+    var stuGrid = mini.get("indetailGrid");
+    grid.load();
+    function onSelectionChanged(e) {
+        var grid = e.sender;
+        var record = grid.getSelected();
+        if (record) {
+            if(record.instate=="已入库"){
+             $("#editUserBtn").css("display","none");
+             $("#add").css("display","none");
+             $("#deleBtn").css("display","none");
+             $("#insertUserBtn").css("display","none");
+            }
+            else
+            {
+                $("#editUserBtn").css("display","inline");
+                $("#add").css("display","inline");
+                $("#deleBtn").css("display","inline");
+                $("#insertUserBtn").css("display","line");
+            }
+            var searchData=[{"name":"eq_inlist.id","value":record.id}];
+            stuGrid.load({"searchData":JSON.stringify(searchData),sortField:"createtime",sortOrder:"DESC"});
+            mini.get("cid").setValue(record.id);
+        }
+    }
+    function insert(){
+        var id=grid.getSelected()
+        if(id==null){
+            alert("请选择至少一条")
+        }
+        else{
+    $.ajax({
+        type:"POST",
+        url:"/api/warehouse/inlist/insert?id="+id.id,
+        success:function(){
+           alert("成功入库");
+            window.location.reload();
+        },
+        error:function(){
+            alert("请求失败");
+        }
+    });}
+    }
+</script>
+</body>
+</html>

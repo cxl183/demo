@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title></title>
+    <script src="../ui/resources/js/boot.js" type="text/javascript"></script>
+    <link href="../ui/resources/css/core.css" rel="stylesheet" type="text/css" />
+    <link href="../ui/resources/css/skin.css" rel="stylesheet" type="text/css" />
+    <link href="../ui/resources/css/table.css" rel="stylesheet" type="text/css" />
+    <style>
+        body
+        {
+            font-family:微软雅黑;
+            font-size:14px;
+        }
+        .title
+        {
+            padding-left:8px;
+            padding-top:15px;
+            padding-bottom:16px;
+            border-bottom:solid 1px #ccc;
+        }
+        .title-text
+        {
+            display:inline-block;
+            vertical-align:middle;
+            border-left:solid 2px #258be4;
+            padding-left:10px;
+            padding-right:10px;
+            font-size:16px;
+            cursor:default;
+            color:#555;
+        }
+        .formtable
+        {
+            width:100%;
+            table-layout:fixed;
+            margin-top:10px;
+        }
+        .formtable-cell
+        {
+            padding-bottom:10px;
+        }
+        .formtable-label
+        {
+            padding-right:10px;
+            text-align:right;
+        }
+    </style>
+</head>
+<body>
+<form id="classroomForm" method="post">
+    <div class="mini-toolbar" style="text-align:left">
+        <a class="mini-button" iconCls="icon-add" style="margin-right:10px" id="saveBtn" onclick="submitForm('classroomForm','/api/warehouse/indetail/save/')">保存</a>
+        <a class="mini-button" iconCls="icon-reset" style="margin-right:10px" id="resetBtn" onclick="resetForm('classroomForm')">重置</a>
+        <a class="mini-button" iconCls="icon-remove" style="margin-right:10px" onclick="onCancel">关闭</a>
+    </div>
+    <div class="title">
+        <span class="title-text">入库明细</span>
+    </div>
+    <table class="formtable" cellspacing="0" cellpadding="0">
+        <tr>
+            <input class="mini-hidden" id="inlistid" name="inlistid"/>
+            <td class="formtable-cell formtable-label" ><font color="red">*</font>产品选择：</td>
+            <td class="formtable-cell"><input readonly="readonly" class="mini-textbox" id="productid2" style="width:20%"  required="true"/>
+                <a class="mini-button" iconCls="icon-redo" onclick="getProductSelector()"></a></td>
+            <input class="mini-hidden" id="productid" name="productid"/>
+        </tr>
+        <tr>
+            <td class="formtable-cell formtable-label" ><font color="red">*</font>数量：</td>
+            <td class="formtable-cell"><input id="qty" name="qty" class="mini-spinner"  minValue="1" style="width:20%" /></td>
+        </tr>
+        <tr>
+            <td class="formtable-cell formtable-label" ><font color="red">*</font>仓库：</td>
+            <td class="formtable-cell"><input class="mini-combobox" id="depot" onvaluechanged="onValueChanged" required="true"
+                                              style="width:20%" textField="depotname" url="/api/warehouse/depot/"
+                                              valueField="id"/></td>
+        </tr>
+        <tr>
+            <td class="formtable-cell formtable-label" ><font color="red">*</font>区域：</td>
+            <td class="formtable-cell"><input class="mini-combobox" id="area" style="width:20%" onvaluechanged="onValueChanged2"
+                                              required="true" textField="areaname" valueField="id"/></td>
+        </tr>
+        <tr>
+            <td class="formtable-cell formtable-label" ><font color="red">*</font>库位：</td>
+            <td class="formtable-cell"><input class="mini-combobox" name="positionid" id="positionid" style="width:20%"  required="true" textField="positionname" valueField="id"/></td>
+        </tr>
+    </table>
+</form>
+<script th:inline="javascript">
+    var productid="";
+    mini.parse();
+    var objId =[[${objId}]];
+    var fkId =[[${fkId}]];
+    mini.get("inlistid").setValue(fkId);
+    var action =[[${action}]];
+    if(objId!=null){
+        loadForm('classroomForm','/api/demo/classroom/'+objId,action);
+    }
+    function getProductSelector(){
+     var cols=[{'headerAlign':'center','type':'checkcolumn'},
+         {'header':'产品编号','field':'productcode','headerAlign':'center'},
+         {'header':'产品名称','field':'productname','headerAlign':'center'},
+         {'header':'产品种类','field':'categoryname','headerAlign':'center'},
+     ];
+     var searchFields=[{'name':'like_productname','label':'产品名称'}];
+        mini.open({
+            title:"选择产品",
+            url:selectorPageUrl,
+            width:"60%",
+            showMaxButton:true,
+            allowResize:false,
+            onload:function(){
+                var iframe = this.getIFrameEl();
+                var data = {gridUrl:'/api/warehouse/product/',cols:cols,searchFields:searchFields,multiSelect:false};
+                iframe.contentWindow.SetDataForSelector(data);
+            },
+         ondestroy:function(){
+                 var iframe=this.getIFrameEl();
+                 var data=iframe.contentWindow.GetData();
+                 data=mini.clone(data);
+                 if(data){
+                     if(data.length==1){
+                         mini.get("productid2").setValue(data[0].productname);
+                         productid=data[0].id;
+                         mini.get("productid").setValue(productid);
+                     }
+                     else {
+                         mini.alert("请选择一条记录！");
+                     }
+                 }
+         }
+     });
+    }
+    function onValueChanged(){
+        var id = mini.get("depot").getValue();
+        mini.get("area").setValue("");
+        var url = "/api/warehouse/depot/" + id
+        mini.get("area").setUrl(url);
+        mini.get("area").select(0);
+        onValueChanged2();
+    }
+    function onValueChanged2(){
+        var id = mini.get("area").getValue();
+        mini.get("positionid").setValue("");
+        var url = "/api/warehouse/depot/areid/"+id
+        mini.get("positionid").setUrl(url);
+        mini.get("positionid").select(0);
+        }
+</script>
+</body>
+</html>

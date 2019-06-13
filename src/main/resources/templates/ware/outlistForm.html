@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../ui/resources/js/boot.js" type="text/javascript"></script>
+    <link href="../ui/resources/css/core.css" rel="stylesheet" type="text/css" />
+    <link href="../ui/resources/css/skin.css" rel="stylesheet" type="text/css" />
+    <link href="../ui/resources/css/table.css" rel="stylesheet" type="text/css" />
+    <style>
+        body
+        {
+            font-family:微软雅黑;
+            font-size:14px;
+        }
+        .title
+        {
+            padding-left:8px;
+            padding-top:15px;
+            padding-bottom:16px;
+            border-bottom:solid 1px #ccc;
+        }
+        .title-text
+        {
+            display:inline-block;
+            vertical-align:middle;
+            border-left:solid 2px #258be4;
+            padding-left:10px;
+            padding-right:10px;
+            font-size:16px;
+            cursor:default;
+            color:#555;
+        }
+        .formtable
+        {
+            width:100%;
+            table-layout:fixed;
+            margin-top:10px;
+        }
+        .formtable-cell
+        {
+            padding-bottom:10px;
+        }
+        .formtable-label
+        {
+            padding-right:10px;
+            text-align:right;
+        }
+    </style>
+</head>
+<body>
+<form id="classroomForm" method="post">
+    <div class="mini-toolbar" style="text-align:left">
+        <a class="mini-button" iconCls="icon-add" style="margin-right:10px" id="saveBtn" onclick="submitForm('classroomForm','/api/warehouse/outlist/')">保存</a>
+        <a class="mini-button" iconCls="icon-reset" style="margin-right:10px" id="resetBtn" onclick="resetForm('classroomForm')">重置</a>
+        <a class="mini-button" iconCls="icon-remove" style="margin-right:10px" onclick="onCancel">关闭</a>
+    </div>
+    <div class="title">
+        <span class="title-text">出库单信息</span>
+    </div>
+    <table class="formtable" cellspacing="0" cellpadding="0">
+        <tr>
+            <input name="id" class="mini-hidden"/>
+            <td class="formtable-cell formtable-label"><font color="red">*</font>出库单编号：</td>
+            <td class="formtable-cell"><input class="mini-textbox" id="outlistcode" name="outlistcode" style="width:90%" required="true" /></td>
+            <td class="formtable-cell formtable-label"><font color="red">*</font>入库经办人：</td>
+            <td class="formtable-cell"><input class="mini-textbox" name="handler" style="width:90%" required="true"/></td>
+        </tr>
+        <tr>
+            <td class="formtable-cell formtable-label" ><font color="red">*</font>备注：</td>
+            <td class="formtable-cell"><input class="mini-textbox" name="memo" style="width:90%"  required="true"/></td>
+        </tr>
+    </table>
+</form>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    mini.parse();
+    var objId =[[${objId}]];
+    var fkId =[[${fkId}]];
+    var action =[[${action}]];
+    if(objId!=null){
+        loadForm('classroomForm','/api/warehouse/outlist/'+objId,action);
+    }
+    /*]]>*/
+</script>
+</body>
+</html>
